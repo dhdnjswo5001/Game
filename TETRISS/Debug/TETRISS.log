@@ -1,14 +1,16 @@
-﻿  Shape.cpp
-  TETRISS.cpp
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(147): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(158): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(170): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(222): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(248): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(259): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(270): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(281): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(305): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\lenovo\source\repos\tetris\tetriss\tetriss.cpp(325): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  코드를 생성하고 있습니다...
-  TETRISS.vcxproj -> C:\Users\lenovo\source\repos\Tetris\Debug\TETRISS.exe
+﻿  TETRISS.cpp
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(48): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(215): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(227): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(241): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(252): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(264): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(316): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(327): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(353): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(364): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(375): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(386): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(409): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\lenovo\desktop\포트폴이오\tetris\tetriss\tetriss.cpp(430): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  TETRISS.vcxproj -> C:\Users\lenovo\Desktop\포트폴이오\Tetris\Debug\TETRISS.exe

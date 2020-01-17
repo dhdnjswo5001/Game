@@ -4,6 +4,7 @@
 #include "pch.h"
 
 #include <iostream>
+#include<thread>
 #include<time.h>
 #include<string>
 #include <vector>
@@ -11,8 +12,11 @@
 #include<Windows.h>
 #include<conio.h>
 #include <cstdlib>
+
 #define tileXLen 15
 #define tileYLen 25
+#define previewtileXLen 10
+#define previewtileYLen 10
 #define start_endLine 5
 #define maxScoreCount 6
 using namespace std;
@@ -25,14 +29,26 @@ typedef struct Tile
 }Tile;
 
 
+int previewXlen = previewtileXLen + tileXLen;
 Tile tileArry[tileYLen][tileXLen];
+Tile TmptileArry[tileYLen][tileXLen];
+Tile previewTileArry[previewtileXLen][previewtileYLen];
+Tile TmppreviewTileArry[previewtileXLen][previewtileYLen];
 int score;
 //Score가 표시되는 줄
 int scoreRenderLine = 2;
 //Score Render버퍼
 char Score[maxScoreCount];
 // 내려가는 동안 Sleeptime -> 클수록 느려짐
-int DownPauseTime = 50;
+int DownPauseTime = 130;
+
+//     Window함수를 통해 해당 좌표로 커서 이동을 할수있는 함수
+void gotoxy(int x, int y, string st)
+{
+	COORD pos = { x,y };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+	cout << st;
+}
 
 //스코어 출력을 위해 int에서 string으로 바꿔줌(재귀함수 이용)
 void Int2string(int _score,int k)
@@ -78,6 +94,17 @@ void tileContentInit()
 		}
 	}
 }
+// 프리뷰 렌더링 초기화
+void PreviewInit()
+{
+	for (int i = 1; i < previewtileYLen-1; i++)
+	{
+		for (int j = tileXLen+1; j < previewXlen-1; j++)
+		{
+			previewTileArry[i][j].tileST = "  ";
+		}
+	}
+}
 // 스코어버퍼 처음에 0으로 초기화 해줌
 void scoreInit()
 {
@@ -108,6 +135,14 @@ void tileSet(int x, int y,bool isControlled)
 	tileArry[y][x].Controlled = isControlled;
 
 }
+// preview 좌표 타일 설정
+void previewTileSet(int x, int y, bool isControlled)
+{
+	previewTileArry[y][x].tileST = "■";
+	previewTileArry[y][x].Controlled = isControlled;
+
+}
+
 // 초기 맵세팅
 void maptileArrySetting()
 {
@@ -120,24 +155,83 @@ void maptileArrySetting()
 			if ((i==0 || i== tileYLen-1) || (j==0 || j==tileXLen-1))
 			{
 				tileSet(j, i,false);
+				gotoxy(j * 2, i, tileArry[i][j].tileST);
 			}	
 		}
 	}
+	
+	//preview타일 맵초기화
+	for (int i = 0; i < previewtileYLen; i++)
+	{
+		for (int j = tileXLen; j < previewXlen; j++)
+		{
+			if ((i == 0 || i == previewtileYLen - 1) || (j == 0 || j == previewXlen - 1))
+			{
+				previewTileSet(j, i, false);
+				gotoxy(j * 2, i, previewTileArry[i][j].tileST);
+			}
+		}
+	}
+	copy(&tileArry[0][0], &tileArry[0][0] + tileXLen * tileYLen, &TmptileArry[0][0]);
+	copy(&previewTileArry[0][0], &previewTileArry[0][0] + previewtileXLen * previewtileYLen, &TmppreviewTileArry[0][0]);
+
 }
 // 타일배열에 있는 문자를 그대로 그려주는 함수
 void Rendering()
 {
-	system("cls");
 	for (int i = 0; i < tileYLen; i++)
 	{
 		for (int j = 0; j < tileXLen; j++)
 		{
-			cout << tileArry[i][j].tileST;
+			if (TmptileArry[i][j].tileST != tileArry[i][j].tileST)
+			{
+				// 화면이 깜빡이는걸 방지하기 위해 타일배열 하나를 더만들고 원본타일배열에서 바뀐부분만 그려줌
+				TmptileArry[i][j] = tileArry[i][j];
+				gotoxy(j*2, i, tileArry[i][j].tileST);
+			}
 		}
-		cout << endl;
 	}
 }
-
+//preview 렌더함수
+void PreviewRendering()
+{
+	for (int i = 0; i < previewtileYLen; i++)
+	{
+		for (int j = tileXLen; j < previewXlen; j++)
+		{
+			if (TmppreviewTileArry[i][j].tileST != previewTileArry[i][j].tileST)
+			{
+				// 화면이 깜빡이는걸 방지하기 위해 타일배열 하나를 더만들고 원본타일배열에서 바뀐부분만 그려줌
+				TmppreviewTileArry[i][j] = previewTileArry[i][j];
+				gotoxy(j * 2, i, previewTileArry[i][j].tileST);
+			}
+		}
+	}
+}
+// 컨트롤모형이 한칸씩 내려감
+void Booster(Shape* Shapes)
+{
+	bool iscanMove = true;
+	for (int i = 0; i < Shapes->vec.size(); i++)
+	{
+		// 모형이 안착했을때 
+		if (tileArry[Shapes->vec[i].second + 1][Shapes->vec[i].first].Controlled == false)
+		{
+			iscanMove = false;
+			break;
+		}
+	}
+	if (iscanMove==true)
+	{
+		// 모형 밑으로 내리기
+		for (int i = 0; i < Shapes->vec.size(); i++)
+		{
+			Shapes->vec[i].second += 1;
+			tileSet(Shapes->vec[i].first, Shapes->vec[i].second, true);
+		}
+	}
+			
+}
 // 주변에 Controlled가 false인 타일이 없으면 내가 조종하는 모형을 스핀하게 하는 함수
 void Spin(Shape* Shapes)
 {
@@ -149,7 +243,7 @@ void Spin(Shape* Shapes)
 		if (tileArry[Shapes->vec[i].second][Shapes->vec[i].first].Controlled==false)
 		{
 			blocked = true;
-			Shapes->SetSpindirvec(true);
+			Shapes->SetSpindirvec(false);
 			break;
 		}
 	}
@@ -198,9 +292,9 @@ void CheckScoreLine(int topline)
 				for (int m = 1; m < tileXLen-1; m++)
 					{
 						tileArry[k+1][m] = tileArry[k][m];
-					}
+					} 
 				}
-			i = tileYLen - 2;
+			i = tileYLen - 1;
 		}
 	}
 }
@@ -225,7 +319,17 @@ Shape* MakeShape(int x, int y, Shapetype type)
 	}
 	return Shapes;
 }
+// preview에 모형 만들어줌
+Shape* MakePreviewShape(Shapetype type)
+{
+	Shape* Shapes = new Shape(tileXLen + (previewtileXLen/2), previewtileYLen / 2, type);
 
+	for (int i = 0; i < Shapes->vec.size(); i++)
+	{
+		previewTileSet(Shapes->vec[i].first, Shapes->vec[i].second, false);
+	}
+	return Shapes;
+}
 //컨트롤 모형의 움직임 함수
 void MoveShape(Shape* Shapes)
 {
@@ -244,6 +348,7 @@ void MoveShape(Shape* Shapes)
 				// 키가 눌리면
 				if (key == 'M'  )
 				{
+					Sleep(80);
 					// 갈수있는지 검사
 					for (int i = 0; i < Shapes->vec.size(); i++)
 					{
@@ -292,16 +397,15 @@ void MoveShape(Shape* Shapes)
 				}
 				else if (key = 'P')
 				{
-
+					Booster(Shapes);
 				}
+				Rendering();
 			}
 		}	
 		else
-		{
+		{		
 			// 내려가는 속도 조절
 			Sleep(DownPauseTime);
-
-
 			for (int i = 0; i < Shapes->vec.size(); i++)
 			{
 				// 모형이 안착했을때 
@@ -318,6 +422,7 @@ void MoveShape(Shape* Shapes)
 					Controlled_outShape(Shapes);
 					// 점수터트릴 라인 체크
 					CheckScoreLine(topline);
+					Rendering();
 					return;
 				}
 			}
@@ -329,6 +434,13 @@ void MoveShape(Shape* Shapes)
 			}
 		}
 	}
+}
+//preview 업데이트함수
+void previewUpdate(Shapetype type)
+{
+	PreviewInit();
+	MakePreviewShape(type);
+	PreviewRendering();
 }
 // 초기화 함수
 void Start()
@@ -343,6 +455,7 @@ void Update()
 		// 랜덤한 모양의 모형생성
 		int rannum = rand() % 4;
 		Shape* Shape = MakeShape(start_endLine,0,(Shapetype)rannum );
+		previewUpdate((Shapetype)rannum);
 		MoveShape(Shape);	
 	}
 }

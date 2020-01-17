@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Buffer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Shape.h" />
   </ItemGroup>
