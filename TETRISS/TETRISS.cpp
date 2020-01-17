@@ -450,12 +450,15 @@ void Start()
 // 계속되는 업데이트수행 함수
 void Update()
 {
+	// 랜덤한 모양의 모형생성
+	int prerannum = rand() % 4;
+	int rannum = prerannum;
 	while (true)
 	{
-		// 랜덤한 모양의 모형생성
-		int rannum = rand() % 4;
 		Shape* Shape = MakeShape(start_endLine,0,(Shapetype)rannum );
-		previewUpdate((Shapetype)rannum);
+		prerannum = rand() % 4;
+		previewUpdate((Shapetype)prerannum);
+		rannum = prerannum;
 		MoveShape(Shape);	
 	}
 }
